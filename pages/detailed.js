@@ -6,46 +6,31 @@ import Author from '../components/Author'
 import Advert from '../components/Advert'
 import Footer from '../components/Footer'
 import '../public/style/pages/detailed.css'
+import Axios from 'axios'
 import Markdown from 'react-markdown'
 import MarkNav from 'markdown-navbar'
 import 'markdown-navbar/dist/navbar.css'
+import marked from 'marked'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/monokai-sublime.css'
 
-const Detailed = () => {
+const Detailed = (props) => {
+  console.log(props)
+  const renderer = new marked.Renderer()
+  marked.setOptions({
+    renderer: renderer, //定义渲染的方式
+    gfm: true,//启用github的渲染模式
+    pedantic: false,  //是否不容错
+    sanitize: false, //是否忽略html标签
+    tables: true, //github表格渲染
+    break: false, //github的样式的换行符
+    smartLists: true, //自动渲染列表
+    highlight: function (code) {
+      return hljs.highlightAuto(code).value
+    }
+  })
 
-  let markdown = '# P01:课程介绍和环境搭建\n' +
-    '[ **M** ] arkdown + E [ **ditor** ] = **Mditor**  \n' +
-    '> Mditor 是一个简洁、易于集成、方便扩展、期望舒服的编写 markdown 的编辑器，仅此而已... \n\n' +
-    '**这是加粗的文字**\n\n' +
-    '*这是倾斜的文字*`\n\n' +
-    '***这是斜体加粗的文字***\n\n' +
-    '~~这是加删除线的文字~~ \n\n' +
-    '\`console.log(111)\` \n\n' +
-    '# p02:来个Hello World 初始Vue3.0\n' +
-    '> aaaaaaaaa\n' +
-    '>> bbbbbbbbb\n' +
-    '>>> cccccccccc\n' +
-    '***\n\n\n' +
-    '# p03:Vue3.0基础知识讲解\n' +
-    '> aaaaaaaaa\n' +
-    '>> bbbbbbbbb\n' +
-    '>>> cccccccccc\n\n' +
-    '# p04:Vue3.0基础知识讲解\n' +
-    '> aaaaaaaaa\n' +
-    '>> bbbbbbbbb\n' +
-    '>>> cccccccccc\n\n' +
-    '#5 p05:Vue3.0基础知识讲解\n' +
-    '> aaaaaaaaa\n' +
-    '>> bbbbbbbbb\n' +
-    '>>> cccccccccc\n\n' +
-    '# p06:Vue3.0基础知识讲解\n' +
-    '> aaaaaaaaa\n' +
-    '>> bbbbbbbbb\n' +
-    '>>> cccccccccc\n\n' +
-    '# p07:Vue3.0基础知识讲解\n' +
-    '> aaaaaaaaa\n' +
-    '>> bbbbbbbbb\n' +
-    '>>> cccccccccc\n\n' +
-    '``` var a=11; ```'
+  let html = marked(props.article_content)
   return (
     <div>
       <Head>
@@ -72,10 +57,13 @@ const Detailed = () => {
                 <span><Icon type="folder" /> 视频教程</span>
                 <span><Icon type="fire" /> 5498人</span>
               </div>
-              <div className="detailed-content" >
-                <Markdown source={markdown}
+              <div className="detailed-content" dangerouslySetInnerHTML={{
+                __html: html
+              }}>
+                {/* <Markdown source={markdown}
                   escapehtml={false}
-                />
+                /> */}
+                
               </div>
             </div>
 
@@ -89,7 +77,7 @@ const Detailed = () => {
               <div className='nav-title'>文章目录</div>
               <MarkNav
                 className='article-menu'
-                source={markdown}
+                source={html}
                 ordered={true}
               />
             </div>
@@ -101,5 +89,16 @@ const Detailed = () => {
     </div>
   )
 }
-
+Detailed.getInitialProps = async (context) => {
+  console.log(context)
+  const id = context.query.id
+  const promise = new Promise(resolve => {
+    Axios('http://127.0.0.1:7001/articles/' + id).then(res => {
+      resolve(res.data.data)
+    }).catch(e => {
+      console.log(e)
+    })
+  })
+return await promise
+}
 export default Detailed

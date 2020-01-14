@@ -1,13 +1,33 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../public/style/components/header.css'
 import { Row, Col, Menu, Icon } from 'antd'
+import axios from 'axios'
+import api from '../config/apiUrl'
+import Router from 'next/router'
+import Link from 'next/link'
 
 const Header = () => {
-	const MenuItem = Menu.Item
+	const [artTypeArr, setArtTypeArr] = useState([])
+	useEffect(() => {
+		const getType = async () => {
+			const result = await axios(api.types).then(res => {
+				return res.data.data
+			})
+			setArtTypeArr(result)
+		}
+		getType()
+	}, [])
+	const handleNav = (e) => {
+		if (e.key == 0) {
+			Router.push('/index')
+		} else {
+			Router.push('/list?id=' + e.key)
+		}
+	}
 	return (
 		<div className="header">
 			<Row type='flex' justify='center'>
-				<Col xs={24} sm={24} md={10} lg={15} xl={12}>
+				<Col xs={24} sm={24} md={10} lg={12} xl={11}>
 					<span className='header-logo'>
 						codeZX
 				</span>
@@ -15,20 +35,21 @@ const Header = () => {
 						专注前端开发
 				</span>
 				</Col>
-				<Col xs={0} sm={0} md={14} lg={8} xl={6}>
-					<Menu mode='horizontal'>
-						<Menu.Item key='home'>
+				<Col xs={0} sm={0} md={14} lg={12} xl={7} push={1}>
+					<Menu mode='horizontal' onClick={handleNav}>
+						<Menu.Item key='0'>
 							<Icon type='home' />
-							首页
-					</Menu.Item>
-						<Menu.Item key='video'>
-							<Icon type='youtube' />
-							视频
-					</Menu.Item >
-						<Menu.Item key='life'>
-							<Icon type='smile' />
-							生活
-					</Menu.Item >
+							博客首页
+						</Menu.Item>
+						{artTypeArr.map(item => {
+							return (
+								<Menu.Item key={item.Id}>
+									<Icon type={item.icon} />
+									{item.typeName}
+								</Menu.Item >
+							)
+						})}
+
 					</Menu>
 				</Col>
 			</Row>

@@ -8,6 +8,7 @@ import Axios from 'axios'
 import Advert from '../components/Advert'
 import Footer from '../components/Footer'
 import '../public/style/pages/index.css'
+import api from '../config/apiUrl'
 
 const Home = (list) => {
   const [mylist, setMylist] = useState(
@@ -54,7 +55,7 @@ const Home = (list) => {
 }
 Home.getInitialProps = async () => {
   const promise = new Promise(resolve => {
-    Axios.get('http://127.0.0.1:7001/articles').then(res => {
+    Axios.get(api.articles).then(res => {
       resolve(res.data)
     }).catch(res => {
       console.log(res)

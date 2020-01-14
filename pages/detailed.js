@@ -7,16 +7,24 @@ import Advert from '../components/Advert'
 import Footer from '../components/Footer'
 import '../public/style/pages/detailed.css'
 import Axios from 'axios'
-import Markdown from 'react-markdown'
-import MarkNav from 'markdown-navbar'
 import 'markdown-navbar/dist/navbar.css'
 import marked from 'marked'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/monokai-sublime.css'
+import Tocify from '../components/tocify.tsx'
+import api from '../config/apiUrl'
+
 
 const Detailed = (props) => {
   console.log(props)
+  const tocify = new Tocify()
   const renderer = new marked.Renderer()
+  renderer.heading = function (text, level, raw) {
+    const anchor = tocify.add(text, level)
+    return `<a id="${anchor}" href="#${anchor}" class='anchor-fix'>
+    <h${level}>${text}</h${level}>
+    </a>\n`
+  }
   marked.setOptions({
     renderer: renderer, //定义渲染的方式
     gfm: true,//启用github的渲染模式
@@ -50,12 +58,12 @@ const Detailed = (props) => {
             </div>
             <div>
               <div className='detailed-title'>
-                blog的开发
+              {props.title}
           </div>
               <div className="list-icon center">
-                <span><Icon type="calendar" /> 2019-06-28</span>
-                <span><Icon type="folder" /> 视频教程</span>
-                <span><Icon type="fire" /> 5498人</span>
+                <span><Icon type="calendar" /> {props.addTime}</span>
+                <span><Icon type="folder" /> {props.typeName}</span>
+                <span><Icon type="fire" /> {props.view_count}人</span>
               </div>
               <div className="detailed-content" dangerouslySetInnerHTML={{
                 __html: html
@@ -63,7 +71,7 @@ const Detailed = (props) => {
                 {/* <Markdown source={markdown}
                   escapehtml={false}
                 /> */}
-                
+
               </div>
             </div>
 
@@ -75,11 +83,7 @@ const Detailed = (props) => {
           <Affix offsetTop={5}>
             <div className='detailed-nav comm-box'>
               <div className='nav-title'>文章目录</div>
-              <MarkNav
-                className='article-menu'
-                source={html}
-                ordered={true}
-              />
+              {tocify && tocify.render()}
             </div>
           </Affix>
 
@@ -93,12 +97,12 @@ Detailed.getInitialProps = async (context) => {
   console.log(context)
   const id = context.query.id
   const promise = new Promise(resolve => {
-    Axios('http://127.0.0.1:7001/articles/' + id).then(res => {
+    Axios(api.articlesById + id).then(res => {
       resolve(res.data.data)
     }).catch(e => {
       console.log(e)
     })
   })
-return await promise
+  return await promise
 }
 export default Detailed

@@ -31,6 +31,10 @@ module.exports = appInfo => {
     },
     domainWhiteList: ['*']
   },
+    config.cors = {
+    origin: '*',
+      allowMethods: 'GET, HEAD, PUT, POST,PATCH,DELETE,OPTIONS'
+    },
     config.mysql = {
       // database configuration
       client: {

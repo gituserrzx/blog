@@ -9,11 +9,27 @@ import Advert from '../components/Advert'
 import Footer from '../components/Footer'
 import '../public/style/pages/index.css'
 import api from '../config/apiUrl'
+import marked from 'marked'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/monokai-sublime.css'
 
 const Home = (list) => {
   const [mylist, setMylist] = useState(
     list.data
-  )
+  ) 
+  const renderer = new marked.Renderer()
+  marked.setOptions({
+    renderer: renderer, //定义渲染的方式
+    gfm: true,//启用github的渲染模式
+    pedantic: false,  //是否不容错
+    sanitize: false, //是否忽略html标签
+    tables: true, //github表格渲染
+    break: false, //github的样式的换行符
+    smartLists: true, //自动渲染列表
+    // highlight: function (code) {
+    //   return hljs.highlightAuto(code).value
+    // }
+  })
   return (
     <div>
       <Head>
@@ -36,8 +52,9 @@ const Home = (list) => {
                   <span><Icon type='folder' /> {item.typeName}</span>
                   <span><Icon type='fire' /> {item.view_count}人</span>
                 </div>
-                <div className="list-context">
-                  {item.introduce}
+                <div className="list-context" dangerouslySetInnerHTML={{
+                  __html: marked(item.introduce)
+                }}>
                 </div>
               </List.Item>
             )}

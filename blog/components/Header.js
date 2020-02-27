@@ -4,7 +4,6 @@ import { Row, Col, Menu, Icon } from 'antd'
 import axios from 'axios'
 import api from '../config/apiUrl'
 import Router from 'next/router'
-import Link from 'next/link'
 
 const Header = () => {
 	const [artTypeArr, setArtTypeArr] = useState([])
@@ -18,9 +17,19 @@ const Header = () => {
 		getType()
 	}, [])
 	const handleNav = (e) => {
+		console.log(e)
 		if (e.key == 0) {
 			Router.push('/index')
 		} else {
+			let typeName
+			// console.log(artTypeArr)
+			// for(let i = 0; i < artTypeArr.length; i++) {
+			// 	if(e.key == artTypeArr[i].Id) {
+			// 		typeName = artTypeArr[i].typeName
+			// 		break
+			// 	}
+			// }
+			// console.log(typeName)
 			Router.push('/list?id=' + e.key)
 		}
 	}
@@ -44,7 +53,7 @@ const Header = () => {
 						{artTypeArr.map(item => {
 							return (
 								<Menu.Item key={item.Id}>
-									<Icon type={item.icon} />
+									{/* <Icon type={item.icon} /> */}
 									{item.typeName}
 								</Menu.Item >
 							)

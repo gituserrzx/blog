@@ -33,9 +33,9 @@ const Detailed = (props) => {
     tables: true, //github表格渲染
     break: false, //github的样式的换行符
     smartLists: true, //自动渲染列表
-    highlight: function (code) {
-      return hljs.highlightAuto(code).value
-    }
+    // highlight: function (code) {
+    //   return hljs.highlightAuto(code).value
+    // }
   })
 
   let html = marked(props.article_content)
@@ -52,8 +52,8 @@ const Detailed = (props) => {
             <div className="bread-div">
               <Breadcrumb>
                 <Breadcrumb.Item><a href="/">首页</a></Breadcrumb.Item>
-                <Breadcrumb.Item>视频列表</Breadcrumb.Item>
-                <Breadcrumb.Item>xxxx</Breadcrumb.Item>
+                <Breadcrumb.Item>文章</Breadcrumb.Item>
+                <Breadcrumb.Item>{props.title}</Breadcrumb.Item>
               </Breadcrumb>
             </div>
             <div>

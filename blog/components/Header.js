@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import '../public/style/components/header.css'
 import { Row, Col, Menu, Icon } from 'antd'
-import axios from 'axios'
-import api from '../config/apiUrl'
 import Router from 'next/router'
+import {getTypes} from '../config/api'
 
 const Header = () => {
 	const [artTypeArr, setArtTypeArr] = useState([])
 	useEffect(() => {
 		const getType = async () => {
-			const result = await axios(api.types).then(res => {
+			const result = await getTypes().then(res => {
 				return res.data.data
 			})
 			setArtTypeArr(result)
@@ -21,15 +20,6 @@ const Header = () => {
 		if (e.key == 0) {
 			Router.push('/index')
 		} else {
-			let typeName
-			// console.log(artTypeArr)
-			// for(let i = 0; i < artTypeArr.length; i++) {
-			// 	if(e.key == artTypeArr[i].Id) {
-			// 		typeName = artTypeArr[i].typeName
-			// 		break
-			// 	}
-			// }
-			// console.log(typeName)
 			Router.push('/list?id=' + e.key)
 		}
 	}

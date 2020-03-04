@@ -4,7 +4,7 @@ import { Row, Col, List, Icon } from 'antd'
 import Header from '../components/Header'
 import Author from '../components/Author'
 import Link from 'next/link'
-import Axios from 'axios'
+// import Axios from 'axios'
 import Advert from '../components/Advert'
 import Footer from '../components/Footer'
 import '../public/style/pages/index.css'
@@ -12,6 +12,7 @@ import api from '../config/apiUrl'
 import marked from 'marked'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/monokai-sublime.css'
+import {getArticles} from '../config/api'
 
 const Home = (list) => {
   const [mylist, setMylist] = useState(
@@ -72,7 +73,7 @@ const Home = (list) => {
 }
 Home.getInitialProps = async () => {
   const promise = new Promise(resolve => {
-    Axios.get(api.articles).then(res => {
+    getArticles().then(res => {
       resolve(res.data)
     }).catch(res => {
       console.log(res)

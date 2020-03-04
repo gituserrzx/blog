@@ -6,14 +6,12 @@ import Author from '../components/Author'
 import Advert from '../components/Advert'
 import Footer from '../components/Footer'
 import '../public/style/pages/detailed.css'
-import Axios from 'axios'
 import 'markdown-navbar/dist/navbar.css'
 import marked from 'marked'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/monokai-sublime.css'
 import Tocify from '../components/tocify.tsx'
-import api from '../config/apiUrl'
-
+import {getArticlesById} from '../config/api'
 
 const Detailed = (props) => {
   console.log(props)
@@ -97,7 +95,7 @@ Detailed.getInitialProps = async (context) => {
   console.log(context)
   const id = context.query.id
   const promise = new Promise(resolve => {
-    Axios(api.articlesById + id).then(res => {
+    getArticlesById(id).then(res => {
       resolve(res.data.data)
     }).catch(e => {
       console.log(e)

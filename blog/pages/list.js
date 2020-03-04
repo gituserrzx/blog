@@ -6,12 +6,11 @@ import Author from '../components/Author'
 import Advert from '../components/Advert'
 import Footer from '../components/Footer'
 import '../public/style/pages/index.css'
-import api from '../config/apiUrl'
-import Axios from 'axios';
 import Link from 'next/link'
 import marked from 'marked'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/monokai-sublime.css'
+import {getListById} from '../config/api'
 
 const MyList = (list) => {
   const [typeName, setTypeName] = useState('')
@@ -85,7 +84,7 @@ const MyList = (list) => {
 MyList.getInitialProps = async (context) => {
   const id = context.query.id
   const promise = new Promise(resolve => {
-    Axios(api.listById + id).then(res => {
+    getListById(id).then(res => {
       // console.log(res)
       resolve(res.data)
     })

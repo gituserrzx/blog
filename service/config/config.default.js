@@ -23,16 +23,14 @@ module.exports = appInfo => {
     // myAppName: 'egg',
   };
   config.security = {
-    // scrf: {
-    //   enable: false
-    // },
     csrf: {
       enable: false
     },
     domainWhiteList: ['*']
   },
     config.cors = {
-    origin: '*',
+      origin: 'http://localhost:3000',
+      credentials: true, //允许cookie可以跨域
       allowMethods: 'GET, HEAD, PUT, POST,PATCH,DELETE,OPTIONS'
     },
     config.mysql = {

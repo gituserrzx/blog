@@ -3,7 +3,6 @@
 const Controller = require('egg').Controller;
 class HomeController extends Controller {
 	async index() {
-
 		this.ctx.body = 'ni hao'
 	}
 	async getArticleList() {
@@ -24,7 +23,6 @@ class HomeController extends Controller {
 		article.article_content as article_content, 
 		type.typeName as typeName FROM article LEFT JOIN type ON article.type_id = type.Id WHERE article.id = ${id}`
 		const result = await this.app.mysql.query(sql)
-		console.log(result)
 		this.ctx.body = {
 			data: result[0]
 		}
